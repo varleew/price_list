@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌟 Хроники Авгара | Магазин</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0c0c1d 0%, #1a1a3e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Шапка */
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .logo {
+            font-size: 40px;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 5px;
+        }
+
+        /* Баланс с пополнением */
+        .balance-section {
+            background: rgba(30, 60, 114, 0.5);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .balance-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .balance-info h3 {
+            font-size: 14px;
+            color: #a0c8ff;
+            margin-bottom: 5px;
+        }
+
+        .balance-amount {
+            font-size: 32px;
+            font-weight: bold;
+            color: #ffd700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Кнопки пополнения */
+        .topup-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .topup-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .topup-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .topup-amount {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffd700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .topup-price {
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 5px;
+        }
+
+        /* Услуги */
+        .service-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .service-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .service-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .service-price {
+            font-size: 22px;
+            font-weight: bold;
+            color: #ffd700;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .service-desc {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        /* Кнопки */
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-buy {
+            background: linear-gradient(90deg, #ff6b6b, #ffd700);
+            color: #000;
+        }
+
+        .btn-buy:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-buy:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-chat {
+            background: rgba(59, 130, 246, 0.8);
+            color: white;
+            margin-top: 10px;
+        }
+
+        .btn-chat:hover {
+            background: rgba(59, 130, 246, 1);
+        }
+
+        /* Заказы */
+        .orders-section {
+            margin-top: 30px;
+        }
+
+        .order-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .order-service {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .order-id {
+            font-size: 11px;
+            color: #aaa;
+            font-family: monospace;
+        }
+
+        .order-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+            border-left-color: #ffc107;
+        }
+
+        .status-confirmed {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+            border-left-color: #4caf50;
+        }
+
+        .status-rejected {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+            border-left-color: #f44336;
+        }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 15px;
+            padding: 25px;
+            max-width: 400px;
+            width: 100%;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #ffd700;
+            text-align: center;
+        }
+
+        /* Уведомления */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border-left: 4px solid;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+            max-width: 300px;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Шапка -->
+        <div class="header">
+            <div class="logo">🌟</div>
+            <h1 class="title">ХРОНИКИ АВГАРА</h1>
+            <p id="userInfo">Загрузка...</p>
+        </div>
+
+        <!-- Баланс и пополнение -->
+        <div class="balance-section">
+            <div class="balance-row">
+                <div class="balance-info">
+                    <h3>ВАШ БАЛАНС</h3>
+                    <div class="balance-amount">
+                        <span id="balanceValue">150</span>
+                        <span>⭐</span>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 12px; color: #a0c8ff; margin-bottom: 5px;">
+                        Пополнить баланс:
+                    </div>
+                    <div class="topup-grid">
+                        <div class="topup-btn" onclick="showPaymentModal(50)">
+                            <div class="topup-amount">+50 ⭐</div>
+                            <div class="topup-price">100 руб</div>
+                        </div>
+                        <div class="topup-btn" onclick="showPaymentModal(100)">
+                            <div class="topup-amount">+100 ⭐</div>
+                            <div class="topup-price">180 руб</div>
+                        </div>
+                        <div class="topup-btn" onclick="showPaymentModal(200)">
+                            <div class="topup-amount">+200 ⭐</div>
+                            <div class="topup-price">350 руб</div>
+                        </div>
+                        <div class="topup-btn" onclick="showPaymentModal(500)">
+                            <div class="topup-amount">+500 ⭐</div>
+                            <div class="topup-price">800 руб</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Услуги -->
+        <div class="service-card">
+            <div class="service-header">
+                <div class="service-name">🛡️ Деф от владельца</div>
+            </div>
+            <div class="service-desc">
+                Защита от действий владельца на указанный срок
+            </div>
+            
+            <div style="margin: 15px 0;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <span>1 день защиты</span>
+                    <div class="service-price">15 ⭐</div>
+                </div>
+                <button class="btn btn-buy" onclick="buyService('def-1-day', 15, '1 день защиты')">
+                    🛒 Купить
+                </button>
+            </div>
+
+            <div style="margin: 15px 0;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <span>1 неделя защиты</span>
+                    <div class="service-price">50 ⭐</div>
+                </div>
+                <button class="btn btn-buy" onclick="buyService('def-1-week', 50, '1 неделя защиты')">
+                    🛒 Купить
+                </button>
+            </div>
+
+            <div style="margin: 15px 0;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <span>1 месяц защиты</span>
+                    <div class="service-price">100 ⭐</div>
+                </div>
+                <button class="btn btn-buy" onclick="buyService('def-1-month', 100, '1 месяц защиты')">
+                    🛒 Купить
+                </button>
+            </div>
+        </div>
+
+        <div class="service-card">
+            <div class="service-header">
+                <div class="service-name">🔍 Поиск данных</div>
+                <div class="service-price">75 ⭐</div>
+            </div>
+            <div class="service-desc">
+                Глубокий поиск и анализ любой информации
+            </div>
+            <button class="btn btn-buy" onclick="buyService('data-search', 75, 'Поиск данных')">
+                🛒 Купить
+            </button>
+        </div>
+
+        <div class="service-card" style="opacity: 0.5;">
+            <div class="service-header">
+                <div class="service-name">⚠️ Угрозы</div>
+                <div style="color: #f44336; font-size: 12px;">НЕДОСТУПНО</div>
+            </div>
+            <div class="service-desc">
+                Система мониторинга и нейтрализации угроз
+            </div>
+            <button class="btn btn-buy" disabled>
+                🔒 Заблокировано
+            </button>
+        </div>
+
+        <!-- Мои заказы -->
+        <div class="orders-section">
+            <h3 style="margin-bottom: 15px; color: #4fc3f7;">📦 Мои заказы</h3>
+            <div id="ordersList">
+                <!-- Заказы будут добавляться динамически -->
+                <div style="text-align: center; padding: 30px; color: #666;">
+                    У вас пока нет заказов
+                </div>
+            </div>
+        </div>
+
+        <!-- Чат с продавцом -->
+        <div style="margin-top: 30px; text-align: center;">
+            <button class="btn btn-chat" onclick="openSellerChat()">
+                💬 Чат с продавцом
+            </button>
+        </div>
+    </div>
+
+    <!-- Модальное окно оплаты -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <div class="modal-title">Пополнение баланса</div>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <div style="font-size: 48px; color: #ffd700;" id="modalStars">+50 ⭐</div>
+                <div style="color: #aaa; margin-top: 10px;" id="modalPrice">Стоимость: 100 руб</div>
+            </div>
+
+            <div style="margin: 20px 0;">
+                <div style="font-size: 14px; color: #aaa; margin-bottom: 10px;">
+                    Выберите способ оплаты:
+                </div>
+                
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <button class="btn" style="background: #333; color: white;" onclick="processPayment('crypto')">
+                        💎 Криптовалюта (USDT)
+                    </button>
+                    <button class="btn" style="background: #0077ff; color: white;" onclick="processPayment('card')">
+                        💳 Банковская карта
+                    </button>
+                    <button class="btn" style="background: #ff9500; color: white;" onclick="processPayment('qiwi')">
+                        🧡 QIWI Кошелек
+                    </button>
+                </div>
+            </div>
+
+            <button class="btn" style="background: rgba(255,255,255,0.1); color: white; margin-top: 15px;" 
+                    onclick="closeModal('paymentModal')">
+                Отмена
+            </button>
+        </div>
+    </div>
+
+    <!-- Модальное окно заказа -->
+    <div class="modal" id="orderModal">
+        <div class="modal-content">
+            <div class="modal-title">Подтверждение заказа</div>
+            
+            <div style="margin: 20px 0;">
+                <div style="margin-bottom: 10px;">
+                    <strong>Услуга:</strong> <span id="modalServiceName"></span>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <strong>Стоимость:</strong> <span id="modalServicePrice"></span> ⭐
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <strong>Ваш баланс:</strong> <span id="modalUserBalance"></span> ⭐
+                </div>
+                
+                <div id="modalBalanceWarning" style="display: none; background: rgba(244,67,54,0.1); padding: 10px; border-radius: 8px; margin: 15px 0;">
+                    ❗ Недостаточно звёзд! Пополните баланс.
+                </div>
+            </div>
+
+            <button class="btn btn-buy" onclick="confirmPurchase()" id="confirmBtn">
+                ✅ Подтвердить покупку
+            </button>
+            
+            <button class="btn" style="background: rgba(255,255,255,0.1); color: white; margin-top: 10px;" 
+                    onclick="closeModal('orderModal')">
+                Отмена
+            </button>
+        </div>
+    </div>
+
+    <!-- Контейнер для уведомлений -->
+    <div id="notificationContainer"></div>
+
+    <script>
+        // Инициализация Telegram Web App
+        const tg = window.Telegram.WebApp;
+        
+        // Переменные
+        let userBalance = 150;
+        let currentOrders = [];
+        let selectedService = null;
+        let selectedTopupAmount = 0;
+        
+        // Инициализация
+        function initApp() {
+            tg.ready();
+            tg.expand();
+            
+            // Получаем данные пользователя
+            const user = tg.initDataUnsafe?.user;
+            if (user) {
+                const name = user.first_name || user.username || 'Покупатель';
+                document.getElementById('userInfo').textContent = `Привет, ${name}!`;
+            }
+            
+            // Загружаем данные
+            loadBalance();
+            loadOrders();
+            
+            // Настраиваем основную кнопку
+            updateMainButton();
+        }
+        
+        // Загрузка баланса
+        function loadBalance() {
+            const saved = localStorage.getItem('augar_balance_v2');
+            if (saved) {
+                userBalance = parseInt(saved);
+                document.getElementById('balanceValue').textContent = userBalance;
+            }
+        }
+        
+        // Сохранение баланса
+        function saveBalance() {
+            localStorage.setItem('augar_balance_v2', userBalance.toString());
+        }
+        
+        // Загрузка заказов
+        function loadOrders() {
+            const saved = localStorage.getItem('augar_orders_v2');
+            if (saved) {
+                currentOrders = JSON.parse(saved);
+                updateOrdersList();
+            }
+        }
+        
+        // Сохранение заказов
+        function saveOrders() {
+            localStorage.setItem('augar_orders_v2', JSON.stringify(currentOrders));
+        }
+        
+        // Обновление кнопки
+        function updateMainButton() {
+            tg.MainButton.setParams({
+                text: `Баланс: ${userBalance} зв`,
+                color: '#1e3c72',
+                text_color: '#ffffff'
+            });
+            tg.MainButton.show();
+        }
+        
+        // Покупка услуги
+        function buyService(serviceId, price, serviceName) {
+            selectedService = { id: serviceId, price: price, name: serviceName };
+            
+            // Проверяем баланс
+            const canBuy = userBalance >= price;
+            
+            // Заполняем модальное окно
+            document.getElementById('modalServiceName').textContent = serviceName;
+            document.getElementById('modalServicePrice').textContent = price;
+            document.getElementById('modalUserBalance').textContent = userBalance;
+            
+            // Показываем/скрываем предупреждение
+            const warning = document.getElementById('modalBalanceWarning');
+            const confirmBtn = document.getElementById('confirmBtn');
+            
+            if (canBuy) {
+                warning.style.display = 'none';
+                confirmBtn.disabled = false;
+                confirmBtn.innerHTML = '✅ Подтвердить покупку';
+            } else {
+                warning.style.display = 'block';
+                confirmBtn.disabled = true;
+                confirmBtn.innerHTML = '❌ Недостаточно звёзд';
+            }
+            
+            // Показываем модальное окно
+            showModal('orderModal');
+        }
+        
+        // Подтверждение покупки
+        function confirmPurchase() {
+            if (!selectedService) return;
+            
+            const { id, price, name } = selectedService;
+            
+            // Создаем заказ
+            const orderId = 'ORD_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5).toUpperCase();
+            const order = {
+                id: orderId,
+                serviceId: id,
+                serviceName: name,
+                price: price,
+                status: 'pending', // pending, confirmed, rejected, completed
+                createdAt: new Date().toISOString(),
+                customerId: tg.initDataUnsafe?.user?.id,
+                customerName: tg.initDataUnsafe?.user?.first_name || tg.initDataUnsafe?.user?.username || 'Покупатель',
+                customerUsername: tg.initDataUnsafe?.user?.username || null
+            };
+            
+            // Списание средств (резервирование)
+            userBalance -= price;
+            saveBalance();
+            updateBalanceDisplay();
+            
+            // Добавляем заказ
+            currentOrders.push(order);
+            saveOrders();
+            updateOrdersList();
+            
+            // Отправляем уведомление продавцу
+            const orderData = {
+                action: 'new_order',
+                orderId: orderId,
+                service: name,
+                price: price,
+                customerId: order.customerId,
+                customerName: order.customerName,
+                customerUsername: order.customerUsername,
+                timestamp: Date.now()
+            };
+            
+            tg.sendData(JSON.stringify(orderData));
+            
+            // Показываем уведомление
+            showNotification(`✅ Заказ создан! ID: ${orderId}`, 'success');
+            tg.HapticFeedback.notificationOccurred('success');
+            
+            // Закрываем модальное окно
+            closeModal('orderModal');
+            selectedService = null;
+            
+            // Обновляем заказы через 2 секунды (имитация получения статуса от продавца)
+            setTimeout(() => {
+                updateOrdersList();
+            }, 2000);
+        }
+        
+        // Пополнение баланса
+        function showPaymentModal(amount) {
+            selectedTopupAmount = amount;
+            
+            const prices = {
+                50: '100 руб',
+                100: '180 руб',
+                200: '350 руб',
+                500: '800 руб'
+            };
+            
+            document.getElementById('modalStars').textContent = `+${amount} ⭐`;
+            document.getElementById('modalPrice').textContent = `Стоимость: ${prices[amount] || 'уточняйте'}`;
+            
+            showModal('paymentModal');
+        }
+        
+        function processPayment(method) {
+            // Отправляем запрос на оплату продавцу
+            const paymentData = {
+                action: 'payment_request',
+                amount: selectedTopupAmount,
+                method: method,
+                customerId: tg.initDataUnsafe?.user?.id,
+                customerName: tg.initDataUnsafe?.user?.first_name || tg.initDataUnsafe?.user?.username || 'Покупатель',
+                timestamp: Date.now()
+            };
+            
+            tg.sendData(JSON.stringify(paymentData));
+            
+            showNotification(`📤 Запрос на оплату отправлен продавцу. Ожидайте подтверждения.`, 'info');
+            closeModal('paymentModal');
+        }
+        
+        // Обновление отображения баланса
+        function updateBalanceDisplay() {
+            document.getElementById('balanceValue').textContent = userBalance;
+            updateMainButton();
+        }
+        
+        // Обновление списка заказов
+        function updateOrdersList() {
+            const container = document.getElementById('ordersList');
+            
+            if (currentOrders.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 30px; color: #666;">У вас пока нет заказов</div>';
+                return;
+            }
+            
+            let html = '';
+            currentOrders.forEach(order => {
+                let statusText, statusClass;
+                
+                switch (order.status) {
+                    case 'pending':
+                        statusText = '⏳ Ожидает подтверждения';
+                        statusClass = 'status-pending';
+                        break;
+                    case 'confirmed':
+                        statusText = '✅ Подтвержден продавцом';
+                        statusClass = 'status-confirmed';
+                        break;
+                    case 'rejected':
+                        statusText = '❌ Отклонен';
+                        statusClass = 'status-rejected';
+                        break;
+                    case 'completed':
+                        statusText = '🎉 Завершен';
+                        statusClass = 'status-confirmed';
+                        break;
+                    default:
+                        statusText = '⏳ Ожидание';
+                        statusClass = 'status-pending';
+                }
+                
+                const date = new Date(order.createdAt).toLocaleDateString('ru-RU');
+                
+                html += `
+                    <div class="order-card">
+                        <div class="order-header">
+                            <div class="order-service">${order.serviceName}</div>
+                            <div class="service-price">${order.price} ⭐</div>
+                        </div>
+                        <div class="order-id">ID: ${order.id}</div>
+                        <div class="order-status ${statusClass}">
+                            ${statusText}
+                        </div>
+                        ${order.status === 'confirmed' ? `
+                        <button class="btn btn-chat" onclick="startChat('${order.id}')" style="margin-top: 10px;">
+                            💬 Обсудить заказ с продавцом
+                        </button>
+                        ` : ''}
+                        <div style="font-size: 11px; color: #666; margin-top: 8px;">
+                            ${date}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        // Чат с продавцом
+        function openSellerChat() {
+            // Проверяем, есть ли подтвержденные заказы
+            const confirmedOrder = currentOrders.find(o => o.status === 'confirmed');
+            
+            if (confirmedOrder) {
+                startChat(confirmedOrder.id);
+            } else {
+                showNotification('💬 Чат доступен только после подтверждения заказа продавцом', 'info');
+            }
+        }
+        
+        function startChat(orderId) {
+            const chatData = {
+                action: 'open_chat',
+                orderId: orderId,
+                customerId: tg.initDataUnsafe?.user?.id,
+                timestamp: Date.now()
+            };
+            
+            tg.sendData(JSON.stringify(chatData));
+            showNotification('💬 Чат с продавцом открыт. Проверьте бота!', 'success');
+        }
+        
+        // Работа с модальными окнами
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Уведомления
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notificationContainer');
+            
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            
+            // Цвет в зависимости от типа
+            const colors = {
+                'info': '#2196f3',
+                'success': '#4caf50',
+                'error': '#f44336',
+                'warning': '#ff9800'
+            };
+            
+            notification.style.borderLeftColor = colors[type] || colors.info;
+            
+            container.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideIn 0.3s ease reverse';
+                setTimeout(() => {
+                    if (container.contains(notification)) {
+                        container.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+        
+        // Обработка сообщений от бота (обновление баланса, статусов)
+        window.addEventListener('message', (event) => {
+            if (event.data && event.data.type === 'update_balance') {
+                userBalance = event.data.balance;
+                updateBalanceDisplay();
+                saveBalance();
+                showNotification(`✅ Баланс обновлен: ${userBalance} зв`, 'success');
+            }
+            
+            if (event.data && event.data.type === 'order_update') {
+                // Обновляем статус заказа
+                const order = currentOrders.find(o => o.id === event.data.orderId);
+                if (order) {
+                    order.status = event.data.status;
+                    saveOrders();
+                    updateOrdersList();
+                    
+                    const statusMessages = {
+                        'confirmed': '✅ Ваш заказ подтвержден продавцом!',
+                        'rejected': '❌ Заказ отклонен. Средства возвращены.',
+                        'completed': '🎉 Заказ завершен!'
+                    };
+                    
+                    if (statusMessages[event.data.status]) {
+                        showNotification(statusMessages[event.data.status], 
+                                       event.data.status === 'rejected' ? 'error' : 'success');
+                        
+                        if (event.data.status === 'rejected') {
+                            // Возвращаем средства
+                            userBalance += order.price;
+                            updateBalanceDisplay();
+                            saveBalance();
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Инициализация
+        window.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
